@@ -1,0 +1,17 @@
+bibentry(bibtype = "Misc",
+  title = "Bayesian Multivariate Spatial Models for Lattice Data with INLA",
+  author = c(person(given = "Francisco",
+                    family = "Palmi-Perales"),
+             person(given = "Virgilio",
+                    family = "Gomez-Rubio"),
+             person(given = "Miguel A.",
+                    family = "Martinez-Beneito")),
+  year = "2019",
+  eprint = "",
+  archivePrefix = "arXiv",
+  textVersion  = 
+    paste0("Palmi-Perales F, Gomez-Rubio V, Martinez-Beneito M (2019). ",
+      "Bayesian Multivariate Spatial Models for Lattice Data with INLA. ",
+      "arXiv preprint."
+    )
+)
