@@ -157,10 +157,11 @@ inla.MCAR.transform <- function(obj, k, model = "IMCAR", alpha.min, alpha.max) {
 
 #' @export
 
+
 inla.Mmodel.transform<- function(obj, k, alpha.min, alpha.max) {
   # Transform autocorrelation parameters to their 'model scale'
   margs1 <- lapply(obj$marginals.hyperpar[1:k], function(m) {
-    inla.tmarginal( function(x) { 
+    INLA::inla.tmarginal( function(x) { 
         alpha.min + (alpha.max - alpha.min)/(1 + exp(-x))
       }, m)
   })   
