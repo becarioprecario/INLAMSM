@@ -105,8 +105,8 @@ k <- 2 * n.rep #Number of diseases
 alpha.min <- 0
 alpha.max <- 1
 
-#Define independent MCAR model
-model <- inla.rgeneric.define(inla.rgeneric.indep.MCAR.model, debug = TRUE,
+#Define MCAR model
+model <- inla.rgeneric.define(inla.rgeneric.MCAR.model, debug = TRUE,
   k = k, W = W, alpha.min = alpha.min, alpha.max = alpha.max)
 
 #Fit model
@@ -115,6 +115,11 @@ r <- inla(OBS ~ 1 + f(idx, model = model),
   control.predictor = list(compute = TRUE))
 
 summary(r)
+
+# Transformed parameters
+r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "PMCAR",
+  alpha.min = alpha.min, alpha.max = alpha.max)
+r.hyperpar$summary.hyperpar
 
 #Get fitted data, i.e., relative risk
 nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]

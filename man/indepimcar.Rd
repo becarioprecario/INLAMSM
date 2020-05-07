@@ -112,6 +112,10 @@ r <- inla(OBS ~ 1 + f(idx, model = model,
 
 summary(r)
 
+# Transformed parameters
+r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "INDIMCAR")
+r.hyperpar$summary.hyperpar
+
 #Get fitted data, i.e., relative risk
 nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]
 nc.sids$FITTED79 <- r$summary.fitted.values[100 + 1:100, "mean"]

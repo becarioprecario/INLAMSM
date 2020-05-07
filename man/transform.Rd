@@ -12,7 +12,7 @@ inla.MCAR.transform(obj, k, model = "IMCAR", alpha.min, alpha.max)
 
 \item{k}{Number of variables in the multivariate model.}
 
-\item{model}{Either "IIMCAR", "IPMCAR", "IMCAR" or "PMCAR". Not used for M-models.}
+\item{model}{Either "INDIMCAR", "INDPMCAR", "IMCAR" or "PMCAR". Not used for M-models.}
 
 \item{alpha.min}{Lower bound of the autocorrelation parameter alpha.}
 

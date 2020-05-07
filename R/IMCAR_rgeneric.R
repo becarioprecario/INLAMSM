@@ -85,16 +85,21 @@
 #'
 #' #Define model IMCAR
 #' model <- inla.rgeneric.define(inla.rgeneric.IMCAR.model, debug = TRUE,
-#'                               k = k, W = W)
+#'   k = k, W = W)
 #'
 #' #Fit model
 #' r <- inla(OBS ~ 1 + f(idx, model = model,
-#'    extraconstr = list(A = as.matrix(A), e = e)), # + NWPROP,
-#'           data = d, E = EXP, family = "poisson",
-#'           control.predictor = list(compute = TRUE))
+#'     extraconstr = list(A = as.matrix(A), e = e)), # + NWPROP,
+#'   data = d, E = EXP, family = "poisson",
+#'   control.compute = list(config = TRUE), 
+#'   control.predictor = list(compute = TRUE))
 #'
 #' summary(r)
 #'
+#' # Transformed parameters
+#' r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "IMCAR")
+#' r.hyperpar$summary.hyperpar
+#' 
 #' #Get fitted data, i.e., relative risk
 #' nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]
 #' nc.sids$FITTED79 <- r$summary.fitted.values[100 + 1:100, "mean"]
