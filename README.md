@@ -9,4 +9,4 @@ The package can be installed as follows:
 devtools::install_github("becarioprecario/INLAMSM")
 ```
 
-A paper that describes the package can be found in the [arXiv](https://arxiv.org/abs/1909.10804). `R` code to run all the example can be found [here](https://becarioprecario.github.io/files/Palmi-PeralesF-INLAMSM.R).
+A paper that describes the package can be found in the [arXiv](https://arxiv.org/abs/1909.10804). `R` code to run all the examples can be found [here](https://becarioprecario.github.io/files/Palmi-PeralesF-INLAMSM.R).
