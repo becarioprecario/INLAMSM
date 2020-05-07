@@ -10,7 +10,7 @@
 #' 
 #' @param obj An 'inla' object with an MCAR, IMCAR or M-model latent effect.
 #' @param k Number of variables in the multivariate model.
-#' @param model Either "IIMCAR", "IPMCAR", "IMCAR" or "PMCAR". Not used for M-models.
+#' @param model Either "INDIMCAR", "INDPMCAR", "IMCAR" or "PMCAR". Not used for M-models.
 #' @param alpha.min Lower bound of the autocorrelation parameter alpha.
 #' @param alpha.max Upper bound of the autocorrelation parameter alpha.
 #' 
@@ -48,34 +48,39 @@
 inla.MCAR.transform <- function(obj, k, model = "IMCAR", alpha.min, alpha.max) {
 
   # Check
-  if(! model %in% c("IIMCAR", "IPMCAR", "IMCAR", "PMCAR")) {
-    stop("Parameter 'model' must be one of 'IIMCAR', 'IPMCAR', 'IMCAR' or 'PMCAR'.") 
+  if(! model %in% c("INDIMCAR", "INDPMCAR", "IMCAR", "PMCAR")) {
+    stop("Parameter 'model' must be one of 'INDIMCAR', 'INDPMCAR', 'IMCAR' or 'PMCAR'.") 
   }
 
-  cor.param <- ifelse(model %in% c("IIMCAR", "IMCAR"), 0, 1)
+  # Is there a spat. autocorrelation parameter?
+  spat.cor.param <- ifelse(model %in% c("INDIMCAR", "IMCAR"), 0, 1)
 
   # Marginals of diagonal elements in the precision matrix
-  # Log-precission to variances
-  margs1 <- lapply(obj$marginals.hyperpar[cor.param + 1:k], function(X) {
-    INLA::inla.tmarginal(function(x) exp(x), X)
+  # Log-precission to VARIANCES
+  margs1 <- lapply(obj$marginals.hyperpar[spat.cor.param + 1:k], function(X) {
+    INLA::inla.tmarginal(function(x) exp(-x), X)
     }) 
 
-  if(cor.param) {
-  # Marginals of correlations
-  margs2 <- lapply(obj$marginals.hyperpar[-c(1:(k + cor.param))], function(X) {
+  # Marginals of between-diseases correlations
+  if(model %in% c("IMCAR", "PMCAR")) {
+  margs2 <- lapply(obj$marginals.hyperpar[-c(1:(k + spat.cor.param))], function(X) {
     INLA::inla.tmarginal(function(x) {((2 * exp(x))/(1 + exp(x)) - 1)}, X)
     }) 
   }
 
-  if(model %in% c("IPMCAR", "PMCAR")) {
-    margs0 <- INLA::inla.tmarginal(function(x) {alpha.min + (alpha.max - alpha.min)/(1 + exp(-x))}, obj$marginals.hyperpar[[1]])
-    if(model == "IPMCAR") {
+  if(model %in% c("INDPMCAR", "PMCAR")) {
+    margs0 <- INLA::inla.tmarginal(function(x) {
+        alpha.min + (alpha.max - alpha.min)/(1 + exp(-x))
+      },
+      obj$marginals.hyperpar[[1]])
+
+    if(model == "INDPMCAR") {
       margs <- c(list(margs0), margs1)
     } else  {
       margs <- c(list(margs0), margs1, margs2)
     }
   } else {
-    if(model == "IIMCAR") {
+    if(model == "INDIMCAR") {
       margs <- margs1
     } else {
       margs <- c(margs1, margs2)
@@ -90,7 +95,7 @@ inla.MCAR.transform <- function(obj, k, model = "IMCAR", alpha.min, alpha.max) {
   row.names(zmargs) <- names(obj$marginals.hyperpar)
 
   # Variance covariance matrix (from point estimates)
-  if(model %in% c("IIMCAR", "IPMCAR")) {
+  if(model %in% c("INDIMCAR", "INDPMCAR")) {
     # No need to coompute this
     VAR.p <- Diagonal(k, x = 1)
     VAR.m <- Diagonal(k, x = 1)
@@ -116,7 +121,7 @@ inla.MCAR.transform <- function(obj, k, model = "IMCAR", alpha.min, alpha.max) {
     confs <- as.data.frame(do.call(rbind, confs))
 
     if(model == "PMCAR") 
-      confs <- confs[, -c(1:cor.param)] #Remove spatial autocorr. parameter
+      confs <- confs[, -c(1:spat.cor.param)] #Remove spatial autocorr. parameter
 
     # Compute weights
     confs$weight <- confs[, ncol(confs)]
