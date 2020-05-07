@@ -10,10 +10,10 @@
 #' 
 #' @param obj An 'inla' object with an MCAR, IMCAR or M-model latent effect.
 #' @param k Number of variables in the multivariate model.
-#' @param model Either "IMCAR" or "PMCAR". Not used for M-models.
+#' @param model Either "IIMCAR", "IPMCAR", "IMCAR" or "PMCAR". Not used for M-models.
 #' @param alpha.min Lower bound of the autocorrelation parameter alpha.
 #' @param alpha.max Upper bound of the autocorrelation parameter alpha.
-#'
+#' 
 #' @return This function returns a list with the following elements:
 #' \itemize{
 #'
@@ -48,28 +48,38 @@
 inla.MCAR.transform <- function(obj, k, model = "IMCAR", alpha.min, alpha.max) {
 
   # Check
-  if(! model %in% c("IMCAR", "PMCAR")) {
-    stop("Parameter 'model' must be either 'IMCAR'  or 'PMCAR'.") 
+  if(! model %in% c("IIMCAR", "IPMCAR", "IMCAR", "PMCAR")) {
+    stop("Parameter 'model' must be one of 'IIMCAR', 'IPMCAR', 'IMCAR' or 'PMCAR'.") 
   }
 
-  cor.param <- ifelse(model == "IMCAR", 0, 1)
+  cor.param <- ifelse(model %in% c("IIMCAR", "IMCAR"), 0, 1)
 
   # Marginals of diagonal elements in the precision matrix
   # Log-precission to variances
   margs1 <- lapply(obj$marginals.hyperpar[cor.param + 1:k], function(X) {
-    INLA::inla.tmarginal(function(x) exp(-x), X)
+    INLA::inla.tmarginal(function(x) exp(x), X)
     }) 
 
+  if(cor.param) {
   # Marginals of correlations
   margs2 <- lapply(obj$marginals.hyperpar[-c(1:(k + cor.param))], function(X) {
     INLA::inla.tmarginal(function(x) {((2 * exp(x))/(1 + exp(x)) - 1)}, X)
     }) 
+  }
 
-  if(model == "PMCAR") {
+  if(model %in% c("IPMCAR", "PMCAR")) {
     margs0 <- INLA::inla.tmarginal(function(x) {alpha.min + (alpha.max - alpha.min)/(1 + exp(-x))}, obj$marginals.hyperpar[[1]])
-    margs <- c(list(margs0), margs1, margs2)
+    if(model == "IPMCAR") {
+      margs <- c(list(margs0), margs1)
+    } else  {
+      margs <- c(list(margs0), margs1, margs2)
+    }
   } else {
-    margs <- c(margs1, margs2)
+    if(model == "IIMCAR") {
+      margs <- margs1
+    } else {
+      margs <- c(margs1, margs2)
+    }
   }
 
   # Summary statistics
@@ -80,55 +90,61 @@ inla.MCAR.transform <- function(obj, k, model = "IMCAR", alpha.min, alpha.max) {
   row.names(zmargs) <- names(obj$marginals.hyperpar)
 
   # Variance covariance matrix (from point estimates)
-  n <- (k - 1) * k / 2
-  M <- diag(1, k)
-  M[lower.tri(M)] <- zmargs[k + 1:n, "mean"]
-  M[upper.tri(M)] <- t(M)[upper.tri(M)]
-  st.dev <- sqrt(zmargs[1:k, "mean"])
-  st.dev.mat <- matrix(st.dev, ncol = 1) %*% matrix(st.dev, 
-    nrow = 1)
-  VAR.p <- M * st.dev.mat
+  if(model %in% c("IIMCAR", "IPMCAR")) {
+    # No need to coompute this
+    VAR.p <- Diagonal(k, x = 1)
+    VAR.m <- Diagonal(k, x = 1)
+    confs <- NULL
+  } else {
+    n <- (k - 1) * k / 2
+    M <- diag(1, k)
+    M[lower.tri(M)] <- zmargs[k + 1:n, "mean"]
+    M[upper.tri(M)] <- t(M)[upper.tri(M)]
+    st.dev <- sqrt(zmargs[1:k, "mean"])
+    st.dev.mat <- matrix(st.dev, ncol = 1) %*% matrix(st.dev, 
+      nrow = 1)
+    VAR.p <- M * st.dev.mat
 
   
-  # Posterior mean of matrix elements using representation of 
-  # the latent field
+    # Posterior mean of matrix elements using representation of 
+    # the latent field
 
-  # Hyperparameters and log.posterior.density
-  confs  <- lapply(obj$misc$configs$config, function(X) {
-  c(X$theta, X$log.posterior)
-})
-  confs <- as.data.frame(do.call(rbind, confs))
+    # Hyperparameters and log.posterior.density
+    confs  <- lapply(obj$misc$configs$config, function(X) {
+      c(X$theta, X$log.posterior)
+    })
+    confs <- as.data.frame(do.call(rbind, confs))
 
-  if(model == "PMCAR") 
-    confs <- confs[, -c(1:cor.param)] #Remove spatial autocorr. parameter
+    if(model == "PMCAR") 
+      confs <- confs[, -c(1:cor.param)] #Remove spatial autocorr. parameter
 
-  # Compute weights
-  confs$weight <- confs[, ncol(confs)]
-  confs$weight <- exp(confs$weight - max(confs$weight))
-  confs$weight <- confs$weight / sum(confs$weight)
+    # Compute weights
+    confs$weight <- confs[, ncol(confs)]
+    confs$weight <- exp(confs$weight - max(confs$weight))
+    confs$weight <- confs$weight / sum(confs$weight)
 
-  # Transform parameters
-  #Log-precisions to variances
-  confs[, 1:3] <- exp(-confs[, 1:k])
-  # Correlations
-  confs[, k + 1:n] <- 2 / (1 + exp(-confs[, k + 1:n])) - 1
+    # Transform parameters
+    #Log-precisions to variances
+    confs[, 1:3] <- exp(-confs[, 1:k])
+    # Correlations
+    confs[, k + 1:n] <- 2 / (1 + exp(-confs[, k + 1:n])) - 1
 
-  # Posterior mean of matrix entries
+    # Posterior mean of matrix entries
 
-  # Compute variacne matrix for all configurations
-  aux <- apply(confs[, 1:(k + n)], 1, function(param) {
-    M <- diag(1, k)
-    M[lower.tri(M)] <- param[-c(1:k)]
-    M[upper.tri(M)] <- t(M)[upper.tri(M)]
-    st.dev <- sqrt(param[1:k])
-    st.dev.mat <- matrix(st.dev, ncol = 1) %*% matrix(st.dev, nrow = 1)
-    M <- M * st.dev.mat
-    return(M)
-})
+    # Compute variacne matrix for all configurations
+    aux <- apply(confs[, 1:(k + n)], 1, function(param) {
+      M <- diag(1, k)
+      M[lower.tri(M)] <- param[-c(1:k)]
+      M[upper.tri(M)] <- t(M)[upper.tri(M)]
+      st.dev <- sqrt(param[1:k])
+      st.dev.mat <- matrix(st.dev, ncol = 1) %*% matrix(st.dev, nrow = 1)
+      M <- M * st.dev.mat
+      return(M)
+    })
 
-
-  aux <- sapply(1:ncol(aux), function(X) {aux[, X] * confs$weight[X]})
-  VAR.m <- matrix(apply(aux, 1, sum), ncol = k)
+    aux <- sapply(1:ncol(aux), function(X) {aux[, X] * confs$weight[X]})
+    VAR.m <- matrix(apply(aux, 1, sum), ncol = k)
+  }
 
   return(list(marginals.hyperpar = margs, summary.hyperpar = zmargs, 
     VAR.p = VAR.p, VAR.m = VAR.m, confs = confs))
