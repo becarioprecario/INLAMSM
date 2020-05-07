@@ -8,3 +8,5 @@ The package can be installed as follows:
 ```
 devtools::install_github("becarioprecario/INLAMSM")
 ```
+
+A paper that describes the package can be found in the [arXiv](https://arxiv.org/abs/1909.10804).
