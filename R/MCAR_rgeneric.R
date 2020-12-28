@@ -92,7 +92,7 @@
 #' alpha.max <- 1
 #'
 #' #Define MCAR model
-#' model <- inla.rgeneric.define(inla.rgeneric.MCAR.model, debug = TRUE,
+#' model <- inla.rgeneric.define(inla.rgeneric.MCAR.model, debug = FALSE,
 #'   k = k, W = W, alpha.min = alpha.min, alpha.max = alpha.max)
 #'
 #' #Fit model

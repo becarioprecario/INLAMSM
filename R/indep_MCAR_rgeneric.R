@@ -90,7 +90,7 @@
 #'
 #'#Define independent MCAR model
 #'model <- inla.rgeneric.define(inla.rgeneric.indep.MCAR.model,
-#'                              debug = TRUE, k = k, W = W,
+#'                              debug = FALSE, k = k, W = W,
 #'                              alpha.min = alpha.min, alpha.max = alpha.max)
 #'
 #'

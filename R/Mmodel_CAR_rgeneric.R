@@ -91,7 +91,7 @@
 #'
 #'
 #'
-#' model <- inla.rgeneric.define(inla.rgeneric.Mmodel.model, debug = TRUE,
+#' model <- inla.rgeneric.define(inla.rgeneric.Mmodel.model, debug = FALSE,
 #'                               k = k, W = W, alpha.min = alpha.min,
 #'                               alpha.max = alpha.max)
 #'

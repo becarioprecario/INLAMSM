@@ -81,7 +81,7 @@
 #'k <- 2 * n.rep #Number of diseases
 #'
 #'#Define independent IMCAR model
-#'model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model, debug = TRUE,
+#'model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model, debug = FALSE,
 #'                              k = k,
 #'                              W = W)
 #' 
