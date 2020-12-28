@@ -99,7 +99,7 @@ k <- 2 * n.rep #Number of diseases
 
 
 #Define model IMCAR
-model <- inla.rgeneric.define(inla.rgeneric.IMCAR.model, debug = TRUE,
+model <- inla.rgeneric.define(inla.rgeneric.IMCAR.model, debug = FALSE,
   k = k, W = W)
 
 #Fit model
