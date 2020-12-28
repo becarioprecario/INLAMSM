@@ -221,7 +221,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     # Diagonal precion matrix
     PREC <- diag(mprec, k)
 
-    return (list(alpha = alpha, mprec=mprec, PREC = PREC))
+    return (list(alpha = alpha, mprec = mprec, PREC = PREC))
   }
 
 
@@ -270,7 +270,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
     #Uniform priors on the standard deviations
     # log(constant_uniform) is ignored
-     val <- val - sum(theta) / 2 - k * log(2)
+     val <- val - sum(theta[as.integer(2:(k+1))]) / 2 - k * log(2)
 
     return (val)
   }
