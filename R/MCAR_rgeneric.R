@@ -225,7 +225,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     # the other parameters are the correlation parameters ordered by columns.
     mprec <- sapply(theta[as.integer(2:(k+1))], function(x) { exp(x) })
     corre <- sapply(theta[as.integer(-(1:(k+1)))], function(x) {
-      (2*exp(x))/(1 + exp(x)) - 1 })
+      (2 * exp(x))/(1 + exp(x)) - 1 })
 
     param <- c(alpha, mprec, corre)
 
@@ -307,8 +307,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     val <- val + 
       log(MCMCpack::dwish(W = param$PREC, v =  k, S = diag(rep(1, k)))) +
       sum(theta[as.integer(2:(k + 1))]) +  # This is for precisions
-      sum(log(2) + theta[-as.integer(1:(k + 1))] - 2 * log(1 + exp(theta[-as.integer(1:(k + 1))]))) + # This is for correlation terms
-     sum(theta[as.integer(2:(k+1))]) + log(param$param[as.integer(-(1:(k+1)))])
+      sum(log(2) + theta[-as.integer(1:(k + 1))] - 2 * log(1 + exp(theta[-as.integer(1:(k + 1))])))  # This is for correlation terms
 
     return (val)
   }
