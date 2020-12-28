@@ -71,10 +71,10 @@ r.simcar <- try(
 )
 summary(r.simcar)
 
-# One IMCAR model
+# IMCAR model
 #model <- inla.rgeneric.define(inla.rgeneric.IMCAR.model,
 #  k = k, W = W, alpha.min = 0, alpha.max = 1)
-model <- inla.IMCAR.model(k = k, W = W, alpha.min = 0, alpha.max = 1)
+model <- inla.IMCAR.model(k = k, W = W)
 r.imcar <- try(
   inla(OBS ~ 1 + f(idx, model = model, extraconstr = list(A = as.matrix(A), e = e)),
     data = d, E = EXP, family = "poisson",
