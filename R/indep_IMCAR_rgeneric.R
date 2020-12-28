@@ -189,7 +189,7 @@ utils::globalVariables(c("k", "W"))
 
 
     #theta: tau1, tau2, ...., tauk = k parameters.
-    interpret.theta = function()
+    interpret.theta <- function()
     {
       #Function for changing from internal scale to external scale. Also,
       #build the diagonal matrix used to model the between-disease variability.
@@ -205,7 +205,7 @@ utils::globalVariables(c("k", "W"))
 
 
     #Graph of precision function; i.e., a 0/1 representation of precision matrix
-    graph = function()
+    graph <- function()
     {
       # Diagonal precision matrix
       PREC <- diag(1, k)
@@ -214,7 +214,7 @@ utils::globalVariables(c("k", "W"))
     }
 
     #Precision matrix
-    Q = function()
+    Q <- function()
     {
       #Parameters in model scale
       param <- interpret.theta()
@@ -225,11 +225,11 @@ utils::globalVariables(c("k", "W"))
     }
 
     #Mean of model
-    mu = function() {
+    mu <- function() {
       return(numeric(0))
     }
 
-    log.norm.const = function() {
+    log.norm.const <- function() {
       ## return the log(normalising constant) for the model
       #param = interpret.theta()
       #
@@ -240,10 +240,10 @@ utils::globalVariables(c("k", "W"))
       return (val)
     }
 
-    log.prior = function() {
+    log.prior <- function() {
       ## return the log-prior for the hyperparameters.
       ## Uniform prior in (alpha.min, alpha.max) on model scale
-      param = interpret.theta()
+      param <- interpret.theta()
 
      #Uniform priors on the standard deviations
      # log(constant_uniform) is ignored
@@ -252,18 +252,29 @@ utils::globalVariables(c("k", "W"))
       return (val)
     }
 
-    initial = function() {
+    initial <- function() {
       ## return initial values
 
       # Initial values
       return( c(rep(log(1), k)) )
     }
 
-    quit = function() {
+    quit <- function() {
       return (invisible())
     }
 
-    val = do.call(match.arg(cmd), args = list())
+    # FIX for rgeneric to work on R >= 4
+    # Provided by E. T. Krainski
+    if (as.integer(R.version$major) > 3) {
+      if (!length(theta))
+        theta = initial()
+    } else {
+      if (is.null(theta)) {
+        theta <- initial()
+      }
+    }
+
+    val <- do.call(match.arg(cmd), args = list())
     return (val)
   }
 

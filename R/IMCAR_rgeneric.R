@@ -202,7 +202,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
 
   #theta: (k + 1) * k / 2  for lower-tri matrix by col.
-  interpret.theta = function()
+  interpret.theta <- function()
   {
     #Function for changing from internal scale to external scale
     # also, build the inverse of the matrix used to model in the external scale
@@ -244,7 +244,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
 
   #Graph of precision function; i.e., a 0/1 representation of precision matrix
-  graph = function()
+  graph <- function()
   {
 
     PREC <- matrix(1, ncol = k, nrow = k)
@@ -253,7 +253,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
   }
 
   #Precision matrix
-  Q = function()
+  Q <- function()
   {
     #Parameters in model scale
     param <- interpret.theta()
@@ -265,11 +265,11 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
   }
 
   #Mean of model
-  mu = function() {
+  mu <- function() {
     return(numeric(0))
   }
 
-  log.norm.const = function() {
+  log.norm.const <- function() {
     ## return the log(normalising constant) for the model
     #param = interpret.theta()
     #
@@ -280,9 +280,9 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     return (val)
   }
 
-  log.prior = function() {
+  log.prior <- function() {
     ## return the log-prior for the hyperparameters.
-    param = interpret.theta()
+    param <- interpret.theta()
 
     # Whishart prior for joint matrix of hyperparameters
     val <- 
@@ -293,18 +293,29 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     return (val)
   }
 
-  initial = function() {
+  initial <- function() {
     ## return initial values
 
     #Initial values form a diagonal matrix
     return ( c(rep(log(1), k), rep(0, (k * (k - 1) / 2))))
   }
 
-  quit = function() {
+  quit <- function() {
     return (invisible())
   }
 
-  val = do.call(match.arg(cmd), args = list())
+  # FIX for rgeneric to work on R >= 4
+  # Provided by E. T. Krainski
+  if (as.integer(R.version$major) > 3) {
+    if (!length(theta))
+      theta <- initial()
+  } else {
+    if (is.null(theta)) {
+      theta <- initial()
+    }
+  }
+
+  val <- do.call(match.arg(cmd), args = list())
   return (val)
 }
 

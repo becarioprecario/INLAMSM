@@ -212,7 +212,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
   #theta: 1 common correlation parameter alpha,
   #        (k + 1) * k / 2  for lower-tri matrix by col.
-  interpret.theta = function()
+  interpret.theta <- function()
   {
     #Function for changing from internal scale to external scale
     # also, build the inverse of the matrix used to model in the external scale
@@ -257,7 +257,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
 
   #Graph of precision function; i.e., a 0/1 representation of precision matrix
-  graph = function()
+  graph <- function()
   {
 
     PREC <- matrix(1, ncol = k, nrow = k)
@@ -266,7 +266,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
   }
 
   #Precision matrix
-  Q = function()
+  Q <- function()
   {
     #Parameters in model scale
     param <- interpret.theta()
@@ -280,11 +280,11 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
   }
 
   #Mean of model
-  mu = function() {
+  mu <- function() {
     return(numeric(0))
   }
 
-  log.norm.const = function() {
+  log.norm.const <- function() {
     ## return the log(normalising constant) for the model
     #param = interpret.theta()
     #
@@ -295,27 +295,25 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     return (val)
   }
 
-  log.prior = function() {
+  log.prior <- function() {
     ## return the log-prior for the hyperparameters.
     ## Uniform prior in (alpha.min, alpha.max) on model scale
-    param = interpret.theta()
+    param <- interpret.theta()
 
     # log-Prior for the autocorrelation parameter
-    val = - theta[1L] - 2 * log(1 + exp(-theta[1L]))
+    val <- - theta[1L] - 2 * log(1 + exp(-theta[1L]))
 
     # Whishart prior for joint matrix of hyperparameters
-    val = val + 
+    val <- val + 
       log(MCMCpack::dwish(W = param$PREC, v =  k, S = diag(rep(1, k)))) +
       sum(theta[as.integer(2:(k + 1))]) +  # This is for precisions
-      sum(log(2) + theta[-as.integer(1:(k + 1))] - 2 * log(1 + exp(theta[-as.integer(1:(k + 1))]))) # This is for correlation terms
-
-
-    + sum(theta[as.integer(2:(k+1))]) + log(param$param[as.integer(-(1:(k+1)))])
+      sum(log(2) + theta[-as.integer(1:(k + 1))] - 2 * log(1 + exp(theta[-as.integer(1:(k + 1))]))) + # This is for correlation terms
+     sum(theta[as.integer(2:(k+1))]) + log(param$param[as.integer(-(1:(k+1)))])
 
     return (val)
   }
 
-  initial = function() {
+  initial <- function() {
     ## return initial values
 
     # The Initial values form a diagonal matrix
@@ -323,11 +321,23 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
   }
 
-  quit = function() {
+  quit <- function() {
     return (invisible())
   }
 
-  val = do.call(match.arg(cmd), args = list())
+  # FIX for rgeneric to work on R >= 4
+  # Provided by E. T. Krainski
+  if (as.integer(R.version$major) > 3) {
+    if (!length(theta))
+      theta = initial()
+  } else {
+    if (is.null(theta)) {
+      theta <- initial()
+    }
+  }
+
+
+  val <- do.call(match.arg(cmd), args = list())
   return (val)
   }
 
