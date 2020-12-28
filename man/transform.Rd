@@ -49,5 +49,7 @@ This function returns a list with the following elements:
 \description{
 Multivariate spatial models fit will report hyperparameters
 in the internal scale. These functions will transform the hyperparameters
-to a different scale.
+to a different scale. Using this function requires setting 
+\code{control.compute = list(config = TRUE)} when fitting the model with
+INLA.
 }

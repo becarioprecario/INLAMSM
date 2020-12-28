@@ -92,12 +92,15 @@
 #' alpha.max <- 1
 #'
 #' #Define MCAR model
-#' model <- inla.rgeneric.define(inla.rgeneric.MCAR.model, debug = FALSE,
-#'   k = k, W = W, alpha.min = alpha.min, alpha.max = alpha.max)
+#' #model <- inla.rgeneric.define(inla.rgeneric.MCAR.model, debug = FALSE,
+#' #  k = k, W = W, alpha.min = alpha.min, alpha.max = alpha.max)
+#' model <- inla.MCAR.model(k = k, W = W, alpha.min = alpha.min, alpha.max = alpha.max)
+#'
 #'
 #' #Fit model
 #' r <- inla(OBS ~ 1 + f(idx, model = model),
 #'   data = d, E = EXP, family = "poisson",
+#'   control.compute = list(config = TRUE),
 #'   control.predictor = list(compute = TRUE))
 #'
 #' summary(r)

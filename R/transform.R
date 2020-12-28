@@ -6,7 +6,9 @@
 #'
 #' @description Multivariate spatial models fit will report hyperparameters
 #' in the internal scale. These functions will transform the hyperparameters
-#' to a different scale.
+#' to a different scale. Using this function requires setting 
+#' \code{control.compute = list(config = TRUE)} when fitting the model with
+#' INLA.
 #' 
 #' @param obj An 'inla' object with an MCAR, IMCAR or M-model latent effect.
 #' @param k Number of variables in the multivariate model.
