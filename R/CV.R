@@ -54,11 +54,16 @@
 #'
 #' k <- 2  #Number of diseases
 #'
-#' # Three independent ICAR models
-#' model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model,
-#'   k = k, W = W)
+#' # Linear constraint for models
+#' A <- kronecker(Diagonal(k, 1), Matrix(1, ncol = nrow(W), nrow = 1))
+#' e = rep(0, k)
+#'
+#' # Two independent ICAR models
+#' #model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model,
+#' #  k = k, W = W)
+#' model <- inla.INDIMCAR.model(k = k, W = W)
 #' r.simcar <- try(
-#'   inla(OBS ~ 1 + f(idx, model = model),
+#'   inla(OBS ~ 1 + f(idx, model = model, extraconstr = list(A = as.matrix(A), e = e)),
 #'     data = d, E = EXP, family = "poisson",
 #'      # To run faster, REMOVE in real applications
 #'      control.mode = list(theta = c(1.4, 2.1), restart = TRUE),
@@ -67,10 +72,11 @@
 #' summary(r.simcar)
 #'
 #' # One IMCAR model
-#' model <- inla.rgeneric.define(inla.rgeneric.IMCAR.model,
-#'   k = k, W = W, alpha.min = 0, alpha.max = 1)
+#' #model <- inla.rgeneric.define(inla.rgeneric.IMCAR.model,
+#' #  k = k, W = W, alpha.min = 0, alpha.max = 1)
+#' model <- inla.IMCAR.model(k = k, W = W, alpha.min = 0, alpha.max = 1)
 #' r.imcar <- try(
-#'   inla(OBS ~ 1 + f(idx, model = model),
+#'   inla(OBS ~ 1 + f(idx, model = model, extraconstr = list(A = as.matrix(A), e = e)),
 #'     data = d, E = EXP, family = "poisson",
 #'      # To run faster, REMOVE in real applications
 #'      control.mode = list(theta = c(1.77, 2.01, 0.93),
