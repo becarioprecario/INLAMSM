@@ -92,8 +92,8 @@
 #'#Fit multivariate model
 #'r <- inla(OBS ~ 1 + f(idx, model = model,
 #'       extraconstr = list(A = as.matrix(A), e = e)), # + NWPROP,
-#'          data = d, E = EXP, family = "poisson",
-#'          control.predictor = list(compute = TRUE))
+#'  data = d, E = EXP, family = "poisson",
+#'  control.predictor = list(compute = TRUE))
 #'
 #'summary(r)
 #'
