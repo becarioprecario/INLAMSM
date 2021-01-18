@@ -178,7 +178,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     alpha <- alpha.min + (alpha.max - alpha.min) /
       (1 + exp(-theta[as.integer(1:k)]))
 
-    # The next k * k parameters are the entries in the k matrix, by cols.
+    # The next k * k parameters are the entries in the M matrix, by cols.
     M <- matrix(theta[-as.integer(1:k)], ncol = k)
 
     return (list(alpha = alpha, M = M))
