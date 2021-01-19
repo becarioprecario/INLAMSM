@@ -1,7 +1,7 @@
 Package: INLAMSM
 Type: Package
 Title: Multivariate Spatial Models with 'INLA'
-Version: 0.2-1
+Version: 0.2-2
 Authors@R: c(
     person(given = "Francisco",
            family = "Palmí-Perales", 
