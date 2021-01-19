@@ -41,6 +41,7 @@
 #'
 #' \donttest{
 #' require(INLA)
+#' require(sp)
 #' require(spdep)
 #' data(CV)
 #' W <- as(nb2mat(CV.nb, style = "B"), "Matrix")
@@ -118,6 +119,7 @@ NULL
 #' @seealso CV
 #'
 #' @examples
+#' require(sp)
 #' require(spdep)
 #' data(CV)
 #' plot(CV)
