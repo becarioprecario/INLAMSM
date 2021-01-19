@@ -23,7 +23,7 @@ Maintainer: Virgilio Gómez-Rubio <Virgilio.Gomez@uclm.es>
 Description: Implementation of several multivariate areal latent effects for
     'INLA' using the 'rgeneric' latent effect (Palmí-Perales et al., 2019,
     <arXiv:1909.10804>). The 'INLA' package can be downloaded from 
-    <http://www.r-inla.org>. In particular, the package includes latent 
+    <https://www.r-inla.org>. In particular, the package includes latent 
     effects ready to use for several multivariate spatial models:
     intrinsic CAR, proper CAR and the M-model (Botella-Rocamora
     et al., 2015, <doi:10.1002/sim.6423>).
@@ -34,11 +34,11 @@ RoxygenNote: 7.1.1
 Depends:
     R (>= 3.5.0),
     Matrix,
-    MCMCpack
+    MCMCpack,
+    sp
 Suggests: 
     INLA,
     spData,
     spdep,
-    rgdal,
-    sp
+    rgdal
 Additional_repositories: https://inla.r-inla-download.org/R/stable
