@@ -23,6 +23,7 @@ data(CV)
 Adjacency matrix of municipalities in Comunidad Valenciana (Spain)
 }
 \examples{
+require(sp)
 require(spdep)
 data(CV)
 plot(CV)
