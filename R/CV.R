@@ -35,6 +35,8 @@
 #' @references Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping: 
 #' from foundations to multidimensional modeling. CRC/Chapman & Hall, 2019.
 #'
+#' @import sp
+#'
 #' @seealso CV.nb
 #' 
 #' @examples
@@ -115,6 +117,8 @@ NULL
 #' 
 #' @references Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping: 
 #' from foundations to multidimensional modeling. CRC/Chapman & Hall, 2019.
+#'
+#' @import spdep
 #' 
 #' @seealso CV
 #'

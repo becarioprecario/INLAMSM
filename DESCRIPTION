@@ -35,10 +35,10 @@ Depends:
     R (>= 3.5.0),
     Matrix,
     MCMCpack,
-    sp
+    sp,
+    spdep
 Suggests: 
     INLA,
     spData,
-    spdep,
     rgdal
 Additional_repositories: https://inla.r-inla-download.org/R/stable
