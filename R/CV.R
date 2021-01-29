@@ -41,8 +41,7 @@
 #' 
 #' @examples
 #'
-#' \donttest{
-#' require(INLA)
+#' if(require(INLA, quietly = TRUE)) {
 #' require(sp)
 #' require(spdep)
 #' data(CV)
@@ -96,7 +95,7 @@
 #' summary.post$VAR.p # Using point estimates
 #' summary.post$VAR.m # Using posterior sampling
 #'
-#'}
+#' } #if(require(INLA))
 NULL
 
 #' @rdname CV_nb

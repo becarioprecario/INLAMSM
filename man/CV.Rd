@@ -39,8 +39,7 @@ dataset can be found at the original book.
 }
 \examples{
 
-\donttest{
-require(INLA)
+if(require(INLA, quietly = TRUE)) {
 require(sp)
 require(spdep)
 data(CV)
@@ -94,7 +93,7 @@ summary.post <- inla.MCAR.transform(r.imcar, k = k)
 summary.post$VAR.p # Using point estimates
 summary.post$VAR.m # Using posterior sampling
 
-}
+} #if(require(INLA))
 }
 \references{
 Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping: 
