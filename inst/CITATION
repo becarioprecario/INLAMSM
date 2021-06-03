@@ -1,17 +1,18 @@
-bibentry(bibtype = "Misc",
-  title = "Bayesian Multivariate Spatial Models for Lattice Data with INLA",
-  author = c(person(given = "Francisco",
-                    family = "Palmi-Perales"),
-             person(given = "Virgilio",
-                    family = "Gomez-Rubio"),
-             person(given = "Miguel A.",
-                    family = "Martinez-Beneito")),
-  year = "2019",
-  eprint = "",
-  archivePrefix = "arXiv",
-  textVersion  = 
-    paste0("Palmi-Perales F, Gomez-Rubio V, Martinez-Beneito M (2019). ",
-      "Bayesian Multivariate Spatial Models for Lattice Data with INLA. ",
-      "arXiv preprint."
-    )
+bibentry(bibtype = "Article",
+  title        = "Bayesian Multivariate Spatial Models for Lattice Data with {INLA}",
+  author       = c(person(given = "Francisco",
+                          family = "Palm\\'i-Perales"),
+                   person(given = "Virgilio",
+                          family = "G\\'omez-Rubio"),
+                   person(given = c("Miguel", "A."),
+                          family = "Martinez-Beneito")),
+  journal      = "Journal of Statistical Software",
+  year         = "2021",
+  volume       = "98",
+  number       = "2",
+  pages        = "1--29",
+  doi          = "10.18637/jss.v098.i02",
+
+  header       = "To cite INLAMSM in publications use:"
 )
+
