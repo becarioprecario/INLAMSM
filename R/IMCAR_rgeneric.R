@@ -33,6 +33,11 @@
 #' This model is defined using the 'f()' function and an index in order to
 #' identify the spatial areas. See the example.
 #'
+#' @references Palmí-Perales F, Gómez-Rubio V, Martinez-Beneito MA (2021). “Bayesian
+#' Multivariate Spatial Models for Lattice Data with INLA.” _Journal of
+#' Statistical Software_, *98*(2), 1-29. doi: 10.18637/jss.v098.i02 (URL:
+#' https://doi.org/10.18637/jss.v098.i02).
+#'
 #' @section Prior distributions of the hyperparameters:
 #' The hyperparamenters of this lattent effect are the marginal precisions of
 #' each disease which are equal to the number of diseases and the correlation

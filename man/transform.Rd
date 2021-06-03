@@ -53,3 +53,9 @@ to a different scale. Using this function requires setting
 \code{control.compute = list(config = TRUE)} when fitting the model with
 INLA.
 }
+\references{
+Palmí-Perales F, Gómez-Rubio V, Martinez-Beneito MA (2021). “Bayesian
+Multivariate Spatial Models for Lattice Data with INLA.” _Journal of
+Statistical Software_, *98*(2), 1-29. doi: 10.18637/jss.v098.i02 (URL:
+https://doi.org/10.18637/jss.v098.i02).
+}
