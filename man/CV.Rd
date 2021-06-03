@@ -39,6 +39,7 @@ dataset can be found at the original book.
 }
 \examples{
 
+\donttest{
 if(require(INLA, quietly = TRUE)) {
 require(sp)
 require(spdep)
@@ -94,6 +95,7 @@ summary.post$VAR.p # Using point estimates
 summary.post$VAR.m # Using posterior sampling
 
 } #if(require(INLA))
+} 
 }
 \references{
 Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping: 
