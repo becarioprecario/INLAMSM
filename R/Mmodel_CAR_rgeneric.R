@@ -216,7 +216,7 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
 
     # M^{-1} \kronecker I
     M.inv <- solve(param$M)
-    MI <- kronecker(M.inv, Diagonal(nrow(W), 1))
+    MI <- kronecker(M.inv, Matrix::Diagonal(nrow(W), 1))
 
     # Number of neighbours
     D <- as.vector(apply(W, 1, sum))
